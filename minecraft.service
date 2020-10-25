@@ -1,0 +1,12 @@
+[Unit]
+After=network.target
+
+[Service]
+RemainAfterExit=yes
+WorkingDirectory=/home/deltagi/minecraft
+User=deltagi
+Group=deltagi
+ExecStart=/home/deltagi/minecraft/start.sh start
+
+[Install]
+WantedBy=screen.target

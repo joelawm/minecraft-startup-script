@@ -1,12 +1,16 @@
 [Unit]
+Description=Minecraft Server
 After=network.target
 
 [Service]
-RemainAfterExit=yes
+Type=forking
 WorkingDirectory=/home/deltagi/minecraft
 User=deltagi
 Group=deltagi
-ExecStart=/home/deltagi/minecraft/start.sh start
+ExecStart=/home/deltagi/minecraft/start.sh
+ExecStop=/home/deltagi/minecraft/stop.sh
+Restart=on-failure
+RestartSec=10
 
 [Install]
-WantedBy=screen.target
+WantedBy=multi-user.target

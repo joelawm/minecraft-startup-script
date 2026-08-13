@@ -32,7 +32,32 @@ sudo systemctl status minecraft    # check status
 ```
 
 ## Cron Job
+The cron job must run as **root** because `restart.sh` calls `systemctl restart
+minecraft`, which requires root permissions. The cleanest way is to drop a file
+in `/etc/cron.d/`:
+
+```sh
+sudo nano /etc/cron.d/minecraft
 ```
-0 0,6,12,18 * * * /location/restart.sh >/dev/null 2>&1
+
+Paste this (note the `deltagi` username field — files in `/etc/cron.d/` require
+it, and the path must point to where you installed `restart.sh`):
+
+```cron
+# Restart Minecraft server every 6 hours (as root, so systemctl works)
+SHELL=/bin/sh
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+
+0 0,6,12,18 * * * deltagi /home/deltagi/Documents/GitHub/minecraft-startup-script/restart.sh >/dev/null 2>&1
 ```
+
+Make the file world-readable (cron ignores files it can't read):
+
+```sh
+sudo chmod 644 /etc/cron.d/minecraft
+```
+
+No restart needed — cron picks up files in `/etc/cron.d/` automatically. Avoid
+giving the file a `.sh` extension, as cron ignores those.
+
 This restarts the server every 6 hours, you can add more as needed, my system has 32GBs of ram.
